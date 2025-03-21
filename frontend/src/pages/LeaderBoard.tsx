@@ -5,6 +5,8 @@ import Box from '@mui/material/Box';
 import { IconButton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
+const URL = "https://leetcode-tracker-1-ucio.onrender.com";
+
 interface LcUserData {
   _id: string;
   name: string;
@@ -59,7 +61,7 @@ const LeaderBoard: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/data');
+        const res = await axios.get(URL+'/data');
         setSampleData(res.data.data);
         setLoading(false);
       } catch (error) {
@@ -74,9 +76,9 @@ const LeaderBoard: React.FC = () => {
     setIsReloading(true);
     setReloadMessage('');
     try {
-      await axios.get('http://localhost:3000/adduser');
-      await axios.get('http://localhost:3000/refreshdatabase');
-      const res = await axios.get('http://localhost:3000/data');
+      await axios.get(URL+'/adduser');
+      await axios.get(URL+'/refreshdatabase');
+      const res = await axios.get(URL+'/data');
       setSampleData(res.data.data);
       setReloadMessage('Database updated successfully!');
       setTimeout(() => setReloadMessage(''), 3000);

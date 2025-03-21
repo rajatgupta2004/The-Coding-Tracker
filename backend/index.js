@@ -15,6 +15,7 @@ require('dotenv').config()
 app.use(cors());
 app.use(express.json());
 
+const PORT = process.env.PORT || 3000;
 
 const spreadsheetId = process.env.SpreadSheet_ID;
 const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=xlsx`;
@@ -238,6 +239,6 @@ app.get("/refreshdatabase", async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-  console.log("App is listening on port 3000");
+app.listen(PORT, () => {
+  console.log("App is listening on port "+PORT);
 });
