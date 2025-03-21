@@ -21,7 +21,7 @@ export function Layout() {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <a href='https://mediconnectpro.netlify.app/'>
-                <span className="ml-2 text-xl font-bold">The LeetCode Tracker</span>
+                <span className="ml-2 text-xl font-bold">The Coding Tracker</span>
               </a>
             </div>
             <div className="hidden md:block">

@@ -1,88 +1,163 @@
 import { useState } from "react";
 
 const AddUser = () => {
-    const [name, setName] = useState("");
-    const [roll, setRoll] = useState("");
-    const [username, setUsername] = useState("");
-    const [section, setSection] = useState("");
+  const [name, setName] = useState("");
+  const [roll, setRoll] = useState("");
+  const [section, setSection] = useState("");
+  const [lcUsername, setLcUsername] = useState("");
+  const [cfUsername, setCfUsername] = useState("");
+  const [ccUsername, setCcUsername] = useState("");
+  const [ggUsername, setGgUsername] = useState("");
 
-
-  const handleSubmit= (e:any)=>{
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({name,roll,username,section});
-  }
-
+    console.log({ name, roll, lcUsername, cfUsername, ccUsername, ggUsername, section });
+  };
 
   return (
-    <div className='min-h-screen bg-blue-100 flex items-center justify-center p-4'>
-        <div className='bg-white w-full max-w-2xl rounded-2xl shadow-xl overflow-hidden border border-black/25'>
-            <div className=' p-6'>
-                <h1 className='font-bold text-3xl text-black text-center'>Add New User</h1>
+    
+    <div className="p-6 m-2 border rounded-2xl max-w-6xl mx-auto bg-gray-900 min-h-screen text-gray-100 border border-gray-700">
+
+        <div className="pb-8 border-b border-gray-700">
+          <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+            Add New User
+          </h1>
+        </div>
+        
+        <div className="p-8 space-y-8">
+          <form className="space-y-8" onSubmit={handleSubmit}>
+            <div className="space-y-6">
+              {/* Personal Info Row */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="text-gray-300 font-medium block">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Rajat Gupta"
+                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-gray-300 font-medium block">
+                    Roll No.
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="2200330100172"
+                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
+                    onChange={(e) => setRoll(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-gray-300 font-medium block">
+                    Section
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="A"
+                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
+                    onChange={(e) => setSection(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Platform Usernames */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-gray-300 font-medium block">
+                    <span className="flex items-center gap-2">
+                      <img 
+                        src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/24/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-color-tal-revivo.png" 
+                        className="w-5 h-5"
+                        alt="LeetCode"
+                      />
+                      LeetCode Username
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="rajatgupta05"
+                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
+                    onChange={(e) => setLcUsername(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-gray-300 font-medium block">
+                    <span className="flex items-center gap-2">
+                      <img 
+                        src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/24/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png" 
+                        className="w-5 h-5"
+                        alt="Codeforces"
+                      />
+                      Codeforces Username
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="rajatgupta05"
+                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
+                    onChange={(e) => setCfUsername(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-gray-300 font-medium block">
+                    <span className="flex items-center gap-2">
+                      <img 
+                        src="https://cdn.codechef.com/images/cc-logo.svg" 
+                        className="w-5 h-5"
+                        alt="CodeChef"
+                      />
+                      CodeChef Username
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="rajatgupta05"
+                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
+                    onChange={(e) => setCcUsername(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-gray-300 font-medium block">
+                    <span className="flex items-center gap-2">
+                      <img 
+                        src="https://img.icons8.com/?size=100&id=AbQBhN9v62Ob&format=png&color=000000" 
+                        className="w-5 h-5 filter invert"
+                        alt="GFG"
+                      />
+                      GFG Username
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="rajatgupta05"
+                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
+                    onChange={(e) => setGgUsername(e.target.value)}
+                  />
+                </div>
+              </div>
             </div>
-            <div className='p-8 space-y-6'>
-                <form className='space-y-6' onSubmit={handleSubmit}>
-                    {/* Form Row */}
-                    <div className='space-y-4'>
-                        <div className='flex flex-col space-y-2'>
-                            <label htmlFor="fullname" className='text-gray-700 font-medium'>Full Name</label>
-                            <input 
-                                type="text" 
-                                id='fullname' 
-                                placeholder='Rajat Gupta'
-                                className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all'
-                                onChange={(e)=>setName(e.target.value)}
-                            />
-                        </div>
 
-                        <div className='flex flex-col space-y-2'>
-                            <label htmlFor="roll" className='text-gray-700 font-medium'>Roll No.</label>
-                            <input 
-                                type="text" 
-                                id='roll' 
-                                placeholder='2200330100172'
-                                className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all'
-                                onChange={(e)=>setRoll(e.target.value)}
-                            />
-                        </div>
-
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                            <div className='flex flex-col space-y-2'>
-                                <label htmlFor="section" className='text-gray-700 font-medium'>Section</label>
-                                <input 
-                                    type="text" 
-                                    id='section' 
-                                    placeholder='A'
-                                    className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all'
-                                    onChange={(e)=>setSection(e.target.value)}
-                                />
-                            </div>
-
-                            <div className='flex flex-col space-y-2'>
-                                <label htmlFor="username" className='text-gray-700 font-medium'>LeetCode Username</label>
-                                <input 
-                                    type="text" 
-                                    id='username' 
-                                    placeholder='rajatgupta05'
-                                    className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all'
-                                    onChange={(e)=>setUsername(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='pt-6'>
-                        <button 
-                            type='submit' 
-                            className='w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 transform hover:scale-[1.01]'
-                        >
-                            Add User
-                        </button>
-                    </div>
-                </form>
+            <div className="pt-6">
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 hover:scale-[1.02]"
+              >
+                Add User
+              </button>
             </div>
+          </form>
         </div>
     </div>
-  )
-}
+  );
+};
 
-export default AddUser
+export default AddUser;
