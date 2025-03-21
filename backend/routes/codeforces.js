@@ -1,46 +1,63 @@
 const axios = require('axios'); // Import axios
 
 async function codeforces(username) {
-  let userdata = {};
+  if (!username || typeof username !== "string" || username.trim() === "") {
+    return { status: "error", username, data: "Invalid username provided" };
+  }
+
+  let userdata = {
+    maxRating: 0,
+    maxRank: "Unrated",
+    problemsSolved: 0,
+  };
 
   try {
     // Fetch user info
     const userInfoResponse = await axios.get(`https://codeforces.com/api/user.info?handles=${username}`);
-    if (userInfoResponse.data.status === 'OK') {
-      const userInfo = userInfoResponse.data.result[0];
-      userdata.maxRating = userInfo.maxRating; // Add max rating
-      userdata.maxRank = userInfo.maxRank; // Add max rank
-    } else {
-      throw new Error('User not found');
-    }
 
-    // Fetch user submissions to calculate the number of problems solved
+    // Check if API response is OK and valid
+    if (userInfoResponse.data.status === "OK" && userInfoResponse.data.result.length > 0) {
+      const userInfo = userInfoResponse.data.result[0];
+
+      userdata.maxRating = userInfo.maxRating || 0;
+      userdata.maxRank = userInfo.maxRank || "Unrated";
+    } else {
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      return { status: "error", username, data: "User not found or invalid username" };
+    }
+    return { status: "error", username, data: `Error fetching user info: ${error.message}` };
+  }
+
+  try {
+    // Fetch user submissions to calculate unique problems solved
     const userStatusResponse = await axios.get(`https://codeforces.com/api/user.status?handle=${username}`);
-    if (userStatusResponse.data.status === 'OK') {
+
+    if (userStatusResponse.data.status === "OK" && userStatusResponse.data.result.length > 0) {
       const submissions = userStatusResponse.data.result;
 
-      // Use a Set to store unique problem IDs (to avoid counting duplicates)
+      // Use a Set to store unique problem IDs to avoid duplicates
       const solvedProblems = new Set();
 
       submissions.forEach((submission) => {
-        if (submission.verdict === 'OK') {
-          // Problem is uniquely identified by contestId and problem index (e.g., "123A")
+        if (submission.verdict === "OK" && submission.problem && submission.problem.contestId) {
           const problemId = `${submission.problem.contestId}-${submission.problem.index}`;
           solvedProblems.add(problemId);
         }
       });
 
-      userdata.problemsSolved = solvedProblems.size; // Add number of problems solved
+      userdata.problemsSolved = solvedProblems.size;
     } else {
-      throw new Error('Failed to fetch user submissions');
+      throw new Error("Failed to fetch user submissions or no submissions found");
     }
-
-    return {status:"ok",username,data:userdata};
   } catch (error) {
-    // Handle any errors that occur during the API calls
-    return {status:"error",username , data: error.message };
+    return { status: "error", username, data: `Error fetching user submissions: ${error.message}` };
   }
+
+  // Return successful data
+  return { status: "ok", username, data: userdata };
 }
 
-
-module.exports =  codeforces 
+module.exports = codeforces;

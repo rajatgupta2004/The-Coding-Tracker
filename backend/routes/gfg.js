@@ -1,34 +1,58 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
 
-
 const gfg = async (username) => {
-    let $;
-    try {
-        // Fetch the profile page of the user from GFG
-        const response = await axios.get(`https://auth.geeksforgeeks.org/user/${username}`, {
-            headers: {
-                redirect: 'manual'
-            }
-        });
-        $ = cheerio.load(response.data);
-    } catch (error) {
-        return ({ status:"error",username ,data: 'Failed to fetch user data' });
+    // Validate the username
+    if (!username || typeof username !== "string" || username.trim() === "") {
+        return { status: "error", username, data: "Invalid username provided" };
     }
 
-    // Extract the number of problems solved from GFG profile
-    const problemsSolvedText = $('div.scoreCard_head__nxXR8:contains("Problem Solved")')
+    let $;
+    const url = `https://auth.geeksforgeeks.org/user/${username}`;
+
+    try {
+        // Fetch the user's profile page
+        const response = await axios.get(url, {
+            headers: {
+                redirect: 'manual', // Handle redirects manually
+            },
+        });
+
+        // Check if the page exists by inspecting status code or page title
+        if (response.status !== 200 || response.data.includes("Page Not Found")) {
+            return { status: "error", username, data: "User not found" };
+        }
+
+        // Load the HTML content into cheerio
+        $ = cheerio.load(response.data);
+    } catch (error) {
+        console.error("Error fetching GFG data:", error.message);
+        return { status: "error", username, data: "Failed to fetch user data" };
+    }
+
+    // Extract problems solved - Update selector to account for structure changes
+    let problemsSolvedText = $('div[class*="scoreCard_head__"]:contains("Problem Solved")')
         .first()
-        .find('.scoreCard_head_left--score__oSi_x')
-        .text();
+        .next('div')
+        .text()
+        .trim();
 
-    const problemsSolved = parseInt(problemsSolvedText.trim(), 10);  // Parse the number of problems solved
+    // Parse problems solved and validate
+    const problemsSolved = problemsSolvedText ? parseInt(problemsSolvedText.replace(/\D/g, ""), 10) : NaN;
 
-    if (isNaN(problemsSolved)) {
-        return ({status:"error",username , data: 'User not found or unable to fetch data' });
+    // Handle invalid or missing problems solved count
+    if (isNaN(problemsSolved) || problemsSolved === 0) {
+        return { status: "error", username, data: "User not found or unable to fetch data" };
     } else {
-        return ({status:"ok",username,data:{problems_solved: problemsSolved }});
+        // Return successful data
+        return {
+            status: "ok",
+            username,
+            data: {
+                problems_solved: problemsSolved,
+            },
+        };
     }
 };
 
-module.exports = gfg 
+module.exports = gfg;
