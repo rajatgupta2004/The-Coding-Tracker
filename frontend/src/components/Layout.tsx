@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Activity, Brain, Guitar as Hospital, Shield, Users, Menu, X, Award } from 'lucide-react';
+import { Guitar as Menu, X} from 'lucide-react';
 import { cn } from '../lib/util';
 
 const navigation = [
