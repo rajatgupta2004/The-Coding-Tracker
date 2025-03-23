@@ -151,7 +151,7 @@ const UserModal: React.FC<{ user: UserData; onClose: () => void }> = ({ user, on
           {/* CodeChef Stats */}
           <div className="bg-gray-700 p-4 rounded-lg">
             <Link target="_blank" to={"https://codechef.com/users/" + user.ccUsername}>
-              <img width="100" height="100" src={platformImages["CodeChef"]} alt="CodeChef" />
+              <img width="30" height="30" src={platformImages["CodeChef"]} alt="CodeChef" />
               <h3 className="text-lg font-semibold text-indigo-300 mb-3">CodeChef Stats</h3>
               {user.ccTotal === -1 ?
                 <h1 className="text-red-500 text-2xl">Wrong Username OOPs!</h1>
