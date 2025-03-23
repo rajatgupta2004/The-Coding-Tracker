@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 
 const spreadsheetId = process.env.SpreadSheet_ID;
 const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=xlsx`;
-
+ 
 async function refreshStudentsData() {
   try {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
@@ -46,6 +46,8 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 app.get('/adduser', async (req, res) => {
     const sampleData = await refreshStudentsData();
+    // console.log(sampleData);
+
     const allUser = [];
     
     // Using a standard for loop to await each promise one after another
@@ -62,31 +64,48 @@ app.get('/adduser', async (req, res) => {
             let ggTotal =0;
             
             if(lcRes.status ==='ok'){
-                lcTotal = lcRes.data[0].count;
-                lcEasy = lcRes.data[1].count;
-                lcMedium = lcRes.data[2].count;
-                lcHard = lcRes.data[3].count;
+                lcTotal = lcRes.data.problems_solved[0].count;
+                lcEasy = lcRes.data.problems_solved[1].count;
+                lcMedium = lcRes.data.problems_solved[2].count;
+                lcHard = lcRes.data.problems_solved[3].count;
+            }else{
+                lcTotal = -1;
+                lcEasy=-1;
+                lcMedium = -1;
+                lcHard =-1;
             }
+
+
             if(cfRes.status ==='ok'){
                 cfTotal = cfRes.data.problemsSolved;
                 cfRating = cfRes.data.maxRating;
                 cfRank = cfRes.data.maxRank;
+            }else{
+                cfTotal = -1;
             }
 
             if(ccRes.status ==='ok'){
                 ccTotal = ccRes.data.problems_solved;
                 ccRating = ccRes.data.rating_number;
                 ccRank = ccRes.data.rating;
+            }else{
+                ccTotal=-1;
             }
 
             if(ggRes.status ==='ok'){
                 ggTotal = ggRes.data.problems_solved;
+            }else{
+                ggTotal =-1;
             }
             
             allUser.push({
                 name: user.name,
-                section: user.section,
                 roll: user.roll,
+                gmail:user.gmail,
+                phone:user.phone,
+                passingYear:user.passingYear,
+                branch:user.branch,
+                section: user.section,
                 lcUsername: user.lcUsername,
                 cfUsername: user.cfUsername,
                 ccUsername: user.ccUsername,
@@ -102,6 +121,7 @@ app.get('/adduser', async (req, res) => {
                 ccTotal:ccTotal,
                 ccRating:ccRating,
                 ccRank:ccRank,
+                Total:lcTotal+cfTotal+ccTotal+ggTotal
             });
             await delay(5);
         }
@@ -178,31 +198,39 @@ app.get("/refreshdatabase", async (req, res) => {
                 let ccRank = user.ccRank;
                 let ggTotal = user.ggTotal;
 
-                // Update LeetCode data
-                if (lcRes.status === 'ok') {
-                    lcTotal = lcRes.data[0].count;
-                    lcEasy = lcRes.data[1].count;
-                    lcMedium = lcRes.data[2].count;
-                    lcHard = lcRes.data[3].count;
+                if(lcRes.status ==='ok'){
+                    lcTotal = lcRes.data.problems_solved[0].count;
+                    lcEasy = lcRes.data.problems_solved[1].count;
+                    lcMedium = lcRes.data.problems_solved[2].count;
+                    lcHard = lcRes.data.problems_solved[3].count;
+                }else{
+                    lcTotal = -1;
+                    lcEasy=-1;
+                    lcMedium = -1;
+                    lcHard =-1;
                 }
-
-                // Update Codeforces data
-                if (cfRes.status === 'ok') {
+    
+    
+                if(cfRes.status ==='ok'){
                     cfTotal = cfRes.data.problemsSolved;
                     cfRating = cfRes.data.maxRating;
                     cfRank = cfRes.data.maxRank;
+                }else{
+                    cfTotal = -1;
                 }
-
-                // Update CodeChef data
-                if (ccRes.status === 'ok') {
+    
+                if(ccRes.status ==='ok'){
                     ccTotal = ccRes.data.problems_solved;
                     ccRating = ccRes.data.rating_number;
                     ccRank = ccRes.data.rating;
+                }else{
+                    ccTotal=-1;
                 }
-
-                // Update GeeksforGeeks data
-                if (ggRes.status === 'ok') {
+    
+                if(ggRes.status ==='ok'){
                     ggTotal = ggRes.data.problems_solved;
+                }else{
+                    ggTotal =-1;
                 }
 
                 // Update the user's record in the database

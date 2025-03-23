@@ -1,8 +1,10 @@
-import  { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Guitar as Menu, X} from 'lucide-react';
+import { PanelBottomClose, PanelTopClose } from 'lucide-react';
 import { cn } from '../lib/util';
-
+import axios from 'axios';
+import UserData from '../types';
+const URL = "https://leetcode-tracker-1-ucio.onrender.com";
 const navigation = [
   { name: 'Leader Board', href: '/' },
   { name: 'Analytics', href: '/analytics' },
@@ -10,20 +12,44 @@ const navigation = [
   { name: 'How it Works?', href: '/howitworks' },
 ];
 
+
+
 export function Layout() {
+  const [loading, setLoading] = useState(true);
+  const [sampleData, setSampleData] = useState<UserData[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(URL + '/data');
+        setSampleData(res.data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-blue-100">
-      <nav className="bg-navy text-white">
+    <div className="min-h-screen bg-blue-100 ">
+
+      <nav className="bg-navy text-white z-50 sticky top-0">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center">
-              <a href='https://mediconnectpro.netlify.app/'>
-                <span className="ml-2 text-xl font-bold">The Coding Tracker</span>
-              </a>
+            <div className="flex">
+              <Link to='/' className='flex'>
+                <img className='w-16 h-16 mt-1' src="https://img.icons8.com/?size=100&id=SG4IvAiNNVRd&format=png&color=000000" alt="" />
+                <span className="ml-2 flex w-full text-xl items-center font-bold">The Coding Tracker
+                </span>
+              </Link>
             </div>
+
+
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 {navigation.map((item) => {
@@ -49,7 +75,7 @@ export function Layout() {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-gray-300 hover:text-white focus:outline-none focus:text-white transition duration-150"
               >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {mobileMenuOpen ? <PanelTopClose /> : <PanelBottomClose />}
               </button>
             </div>
           </div>
@@ -75,7 +101,7 @@ export function Layout() {
         </div>
       </nav>
       <main>
-        <Outlet />
+        <Outlet context={{ sampleData, loading, setSampleData }} />
       </main>
     </div>
   );

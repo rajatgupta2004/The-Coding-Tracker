@@ -21,7 +21,6 @@ const router = createBrowserRouter([
       {
         path:'/analytics',
         element :<Analytics/>
-
       },
       {
         path:'/howitworks',
@@ -31,9 +30,7 @@ const router = createBrowserRouter([
         path:'/adduser',
         element :<AddUser/>
       }
-
     ]
-    
   }
 ])
 
@@ -42,3 +39,4 @@ createRoot(document.getElementById('root')!).render(
     <RouterProvider router = {router}/>
   </StrictMode>,
 )
+

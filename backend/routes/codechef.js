@@ -2,76 +2,101 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 
 const codechef = async (username) => {
-    if (!username || typeof username !== "string" || username.trim() === "") {
-        return { status: "error", username, data: "Invalid username provided" };
+    // Input validation
+    if (!username || typeof username !== 'string' || username.length > 20 || !/^[a-zA-Z0-9_]+$/.test(username)) {
+        return {
+            status: "error",
+            username,
+            data: "Invalid username format"
+        };
     }
 
-    const url = `https://www.codechef.com/users/${username}`;
-
+    let $;
     try {
-        // Send request to CodeChef user profile page
-        const response = await axios.get(url, {
+        const response = await axios.get(`https://www.codechef.com/users/${encodeURIComponent(username)}`, {
             headers: {
-                redirect: 'manual',
+                redirect: 'manual'
             },
+            timeout: 10000, // 10 seconds timeout
+            validateStatus: (status) => status < 500 // Accept any status < 500
         });
 
+        // Handle redirects or non-200 status codes
         if (response.status !== 200) {
-            return { status: "error", username, data: "User not found or invalid URL" };
+            return {
+                status: "error",
+                username,
+                data: response.status === 404 ? "User not found" : `Request failed with status ${response.status}`
+            };
         }
 
-        // Load HTML content using cheerio
-        const $ = cheerio.load(response.data);
+        $ = cheerio.load(response.data);
 
-        // Check if user profile exists
-        if ($('title').text().includes("Page Not Found")) {
-            return { status: "error", username, data: "User not found" };
+        // Check if user exists by looking for the username in the page
+        const usernameElement = $('.user-details-container .user-details li').filter((i, item) => {
+            return $(item).find('label').text().trim() === 'Username:';
+        });
+
+        if (!usernameElement.length) {
+            return {
+                status: "error",
+                username,
+                message: "User not found"
+            };
+        }
+
+        // Extract problems solved with better error handling
+        const problemsSolvedElement = $('h3:contains("Total Problems Solved")');
+        let problemsSolved = 0;
+        
+        if (problemsSolvedElement.length) {
+            const problemsText = problemsSolvedElement.text();
+            const match = problemsText.match(/\d+/);
+            problemsSolved = match ? parseInt(match[0], 10) : 0;
         }
 
         // Extract user details
-        let userdata = {
-            username: username,
-            rating: '',
-            rating_number: 0,
-            problems_solved: 0,
+        const userdata = {
+            username: usernameElement.find('span').last().text().trim(),
+            rating: $('.rating').first().text().trim(),
+            rating_number: parseInt($('.rating-number').text().trim(), 10) || 0,
+            problems_solved: problemsSolved
         };
 
-        // Get rating (handle missing data gracefully)
-        const ratingText = $('.rating').first().text().trim();
-        userdata.rating = ratingText || "Unrated";
-
-        // Get rating number (check if numeric value is present)
-        const ratingNumberText = $('.rating-number').text().trim();
-        userdata.rating_number = ratingNumberText ? parseInt(ratingNumberText, 10) : 0;
-
-        // Extract total problems solved
-        const problemsSolvedText = $('h5:contains("Problems Solved")')
-            .next()
-            .text()
-            .trim();
-
-        userdata.problems_solved = problemsSolvedText
-            ? parseInt(problemsSolvedText.match(/\d+/)?.[0] || "0", 10)
-            : 0;
-
-        // Get username from profile (extra validation)
-        $('.user-details li').each((i, item) => {
-            if ($(item).find('label').text().trim() === 'Username:') {
-                userdata.username = $(item).find('span').last().text().trim();
-            }
-        });
-
-        // If username is still empty after scraping
-        if (!userdata.username) {
-            return { status: "error", username, data: "User not found or profile is private" };
+        // Final validation of extracted data
+        if (!userdata.username || isNaN(userdata.rating_number)) {
+            return {
+                status: "error",
+                username,
+                data: "Failed to parse user data"
+            };
         }
 
-        // Return successful data
-        return { status: "ok", username, data: userdata };
+        return {
+            status: "ok",
+            username,
+            data: userdata
+        };
 
     } catch (error) {
-        console.error("Error fetching user data:", error.message);
-        return { status: "error", username, data: "Failed to fetch user data" };
+        // Handle different error types
+        let errorMessage = "Unknown error occurred";
+        
+        if (error.response) {
+            errorMessage = `Request failed with status ${error.response.status}`;
+        } else if (error.request) {
+            errorMessage = "No response received from server";
+        } else if (error.code === 'ECONNABORTED') {
+            errorMessage = "Request timed out";
+        } else {
+            errorMessage = error.message || "Network error";
+        }
+
+        return {
+            status: "error",
+            username,
+            data: errorMessage
+        };
     }
 };
 

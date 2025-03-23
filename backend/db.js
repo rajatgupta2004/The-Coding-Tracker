@@ -10,12 +10,16 @@ mongoose.connect(process.env.MONGODB_URI)
     // { id: 1, name: 'Rajat gupta', section: 'A', username: 'rajatgupta05', easy: 45, medium: 32, hard: 15, total: 92 },
 const userSchema =new mongoose.Schema({
     name:String,
+    roll:String,
+    section:String,
+    gmail:String,
+    phone:String,
+    passingYear:String,
+    branch:String,
     lcUsername:String,
     cfUsername:String,
     ccUsername:String,
     ggUsername:String,
-    section:String,
-    roll:String,
     lcEasy:Number,
     lcMedium:Number,
     lcHard:Number,
@@ -27,7 +31,7 @@ const userSchema =new mongoose.Schema({
     cfRank:String,
     ccRating:Number,
     ccRank:String,
-    
+    Total:Number
 });
 const User = mongoose.model('User',userSchema);
 module.exports= {User};
