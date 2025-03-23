@@ -11,7 +11,7 @@ import platformImages from '../platformImages';
 import handleDownloadExcel from '../handleFunctions';
 import Spinner from '../components/Spinner';
 
-const URL = "https://leetcode-tracker-1-ucio.onrender.com";
+const URL = "https://the-coding-tracker.vercel.app";
 
 const LeaderBoard: React.FC = () => {
 
