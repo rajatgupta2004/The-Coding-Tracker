@@ -1,37 +1,55 @@
 const mongoose = require('mongoose');
 require('dotenv').config()
 mongoose.connect(process.env.MONGODB_URI)
-    .then(()=>{
+    .then(() => {
         console.log("db connected successfully");
     })
-    .catch(()=>{
+    .catch(() => {
         console.log("Error occured in connecting database");
     })
-    // { id: 1, name: 'Rajat gupta', section: 'A', username: 'rajatgupta05', easy: 45, medium: 32, hard: 15, total: 92 },
-const userSchema =new mongoose.Schema({
-    name:String,
-    roll:String,
-    section:String,
-    gmail:String,
-    phone:String,
-    passingYear:String,
-    branch:String,
-    lcUsername:String,
-    cfUsername:String,
-    ccUsername:String,
-    ggUsername:String,
+
+const historySchema = new mongoose.Schema({
+    date: String, // Timestamp for the snapshot
+    lcTotal: Number,
+    cfTotal: Number,
+    ccTotal: Number,
+    ggTotal: Number,
+    Total: Number,
     lcEasy:Number,
     lcMedium:Number,
     lcHard:Number,
-    lcTotal:Number,
-    cfTotal:Number,
-    ccTotal:Number,
-    ggTotal:Number,
-    cfRating:Number,
-    cfRank:String,
-    ccRating:Number,
-    ccRank:String,
-    Total:Number
+    cfRating: Number,
+    ccRating: Number,
+    cfRank: String,
+    ccRank: String,
 });
-const User = mongoose.model('User',userSchema);
-module.exports= {User};
+
+const userSchema = new mongoose.Schema({
+    name: String,
+    roll: String,
+    section: String,
+    gmail: String,
+    phone: String,
+    passingYear: String,
+    branch: String,
+    lcUsername: String,
+    cfUsername: String,
+    ccUsername: String,
+    ggUsername: String,
+    lcEasy: Number,
+    lcMedium: Number,
+    lcHard: Number,
+    lcTotal: Number,
+    cfTotal: Number,
+    ccTotal: Number,
+    ggTotal: Number,
+    cfRating: Number,
+    cfRank: String,
+    ccRating: Number,
+    ccRank: String,
+    Total: Number,
+    history: [historySchema],
+});
+
+const User = mongoose.model('User', userSchema);
+module.exports = { User };

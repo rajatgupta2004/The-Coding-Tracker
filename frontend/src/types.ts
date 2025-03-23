@@ -1,5 +1,19 @@
 
-
+interface UserHistory {
+    date:String;
+    lcEasy: number;
+    lcMedium: number;
+    lcHard: number;
+    lcTotal: number;
+    cfRank: string;
+    cfRating: number;
+    cfTotal: number;
+    ccRank: string;
+    ccRating: number;
+    ccTotal: number;
+    ggTotal: number;
+    Total: number;
+}
 interface UserData {
     _id: string;
     name: string;
@@ -24,8 +38,10 @@ interface UserData {
     ccRating: number;
     ccTotal: number;
     ggTotal: number;
-    Total: number
+    Total: number;
+    history: UserHistory[];
 }
+
 // Type for context data
 export interface ContextType {
     sampleData: UserData[];

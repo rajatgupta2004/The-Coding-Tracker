@@ -5,6 +5,7 @@ const reader = require('xlsx');
 const cheerio = require('cheerio');
 
 const { User } = require('./db');
+const cron = require('node-cron');
 const codeforces = require('./routes/codeforces');
 const codechef = require('./routes/codechef');
 const gfg = require('./routes/gfg');
@@ -270,5 +271,50 @@ app.get("/refreshdatabase", async (req, res) => {
 app.listen(PORT, () => {
   console.log("App is listening on port "+PORT);
 });
+
+
+app.get('/analytics', async (req, res) => {
+    try {
+      const user = await User.findOne({cfUsername:"rajatgupta05"});
+      res.json({
+        name: user.name,
+        section: user.section,
+        history: user.history, // Return historical data
+      });
+
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching analytics data' });
+    }
+  });
+  
+// Schedule to run at 00:00 on 1st of every month
+
+// cron.schedule('*/3 * * * *', async () => {
+//     console.log('Running snapshot every 5 minutes...');
+//     const users = await User.find({});
+  
+//     for (const user of users) {
+//       const currentTimestamp = new Date().toISOString().slice(0, 7); // Add exact timestamp
+//       const snapshot = {
+//         date: currentTimestamp, // Save exact time for testing
+//         lcTotal: user.lcTotal,
+//         lcEasy:user.lcEasy,
+//         lcMedium:user.lcMedium,
+//         lcHard:user.lcHard,
+//         cfTotal: user.cfTotal,
+//         ccTotal: user.ccTotal,
+//         ggTotal: user.ggTotal,
+//         Total: user.Total,
+//         cfRating: user.cfRating,
+//         ccRating: user.ccRating,
+//         cfRank: user.cfRank,
+//         ccRank: user.ccRank,
+//       };
+//       user.history.push(snapshot);
+//       await user.save();
+//     }
+//     console.log('Snapshots saved successfully every 5 minutes!');
+//   });
+  
 
 module.exports = app;

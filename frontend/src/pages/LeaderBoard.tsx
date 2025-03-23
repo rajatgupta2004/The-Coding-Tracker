@@ -126,25 +126,19 @@ const LeaderBoard: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-6 overflow-x-auto">
+        <div className="flex flex-col  sm:flex-row gap-4 mb-6 overflow-x-auto">
+          <div className='w-full p-1'>
           <input
             type="text"
             placeholder="Search by name..."
-            className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100 placeholder-gray-400 flex-grow"
+            className="bg-gray-800 w-full px-4 py-3 bottom-0 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100 placeholder-gray-400 flex-grow"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
           />
-          <select
-            className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
-            value={selectedSection}
-            onChange={e => setSelectedSection(e.target.value)}
-          >
-            {sections.map(section => (
-              <option key={section} value={section}>
-                Section {section}
-              </option>
-            ))}
-          </select>
+          </div>
+          
+          
+          <div className='flex flex-col p-1 min-w-[120px]'>
           <select
             className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
             value={selectedYear}
@@ -152,10 +146,13 @@ const LeaderBoard: React.FC = () => {
           >
             {years.map(year => (
               <option key={year} value={year}>
-                Year {year}
+                {year}
               </option>
             ))}
           </select>
+          <label className='ml-2 text-gray-400'>Passing Year</label>
+          </div>
+          <div className='flex flex-col p-1'>
           <select
             className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
             value={selectedBranch}
@@ -163,10 +160,26 @@ const LeaderBoard: React.FC = () => {
           >
             {branches.map(branch => (
               <option key={branch} value={branch}>
-                Branch {branch}
+                {branch}
               </option>
             ))}
           </select>
+          <label className='ml-2 text-gray-400'>Branch</label>
+          </div>
+          <div className='flex flex-col p-1  min-w-[120px]'>
+            <select
+              className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
+              value={selectedSection}
+              onChange={e => setSelectedSection(e.target.value)}
+            >
+              {sections.map(section => (
+                <option key={section} value={section}>
+                  {section}
+                </option>
+              ))}
+            </select>
+            <label className='ml-2 text-gray-400'>Section</label>
+          </div>
         </div>
         <div className="overflow-x-auto rounded-xl border border-gray-700 shadow-2xl">
           <table className="w-full">
