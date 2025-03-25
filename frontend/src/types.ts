@@ -1,6 +1,7 @@
 
 interface UserHistory {
-    date:String;
+    month:string;
+    year:string;
     lcEasy: number;
     lcMedium: number;
     lcHard: number;

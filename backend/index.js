@@ -289,14 +289,14 @@ app.get('/analytics', async (req, res) => {
   
 // Schedule to run at 00:00 on 1st of every month
 
-// cron.schedule('*/3 * * * *', async () => {
+// cron.schedule('*/1 * * * *', async () => {
 //     console.log('Running snapshot every 5 minutes...');
 //     const users = await User.find({});
   
 //     for (const user of users) {
-//       const currentTimestamp = new Date().toISOString().slice(0, 7); // Add exact timestamp
 //       const snapshot = {
-//         date: currentTimestamp, // Save exact time for testing
+//         year: new Date().toISOString().slice(0, 4), // Save exact time for testing
+//         month: new Date().toISOString().slice(5,7),
 //         lcTotal: user.lcTotal,
 //         lcEasy:user.lcEasy,
 //         lcMedium:user.lcMedium,
@@ -316,5 +316,55 @@ app.get('/analytics', async (req, res) => {
 //     console.log('Snapshots saved successfully every 5 minutes!');
 //   });
   
+
+
+app.get('/generatehistory', async (req, res) => {
+    try {
+      const users = await User.find({});
+      for (const user of users) {
+        const currentMonth = new Date().getMonth() + 2; // Get current month (1-12)
+  
+        // Clear previous history to avoid duplication
+        user.history = [];
+  
+        // Generate history for the last 3 months with decreasing counts
+        for (let i = 3; i >= 1; i--) {
+          const month = (currentMonth - i) <= 0 ? 12 + (currentMonth - i) : (currentMonth - i); // Handle wrap around to previous year
+          const year = month > currentMonth ? new Date().getFullYear() - 1 : new Date().getFullYear();
+          
+          // Apply a decrease in problems for each past month (10% decrease each month for demo)
+          const decreaseFactor = 1 - (i * 0.1); // 10% decrease per month
+          const snapshot = {
+            year: `${year}`,
+            month: `${month}`,
+            lcTotal: Math.max(0, Math.floor(user.lcTotal * decreaseFactor)),
+            lcEasy: Math.max(0, Math.floor(user.lcEasy * decreaseFactor)),
+            lcMedium: Math.max(0, Math.floor(user.lcMedium * decreaseFactor)),
+            lcHard: Math.max(0, Math.floor(user.lcHard * decreaseFactor)),
+            cfTotal: Math.max(0, Math.floor(user.cfTotal * decreaseFactor)),
+            ccTotal: Math.max(0, Math.floor(user.ccTotal * decreaseFactor)),
+            ggTotal: Math.max(0, Math.floor(user.ggTotal * decreaseFactor)),
+            Total: Math.max(0, Math.floor(user.Total * decreaseFactor)),
+            cfRating: user.cfRating,
+            ccRating: user.ccRating,
+            cfRank: user.cfRank,
+            ccRank: user.ccRank,
+          };
+  
+          // Add generated history
+          user.history.push(snapshot);
+        }
+  
+        // Save updated user with new history
+        await user.save();
+        console.log(`History updated for ${user.name}`);
+      }
+  
+      res.json({ message: 'History for past 3 months generated successfully!' });
+    } catch (error) {
+      console.error('Error generating history:', error);
+      res.status(500).send({ error: 'Failed to generate history' });
+    }
+  });
 
 module.exports = app;

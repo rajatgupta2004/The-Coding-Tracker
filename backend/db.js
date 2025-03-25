@@ -9,7 +9,8 @@ mongoose.connect(process.env.MONGODB_URI)
     })
 
 const historySchema = new mongoose.Schema({
-    date: String, // Timestamp for the snapshot
+    year: String, 
+    month:String,
     lcTotal: Number,
     cfTotal: Number,
     ccTotal: Number,
