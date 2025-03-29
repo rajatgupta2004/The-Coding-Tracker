@@ -8,7 +8,7 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 const HowItWorks: React.FC = () => {
   return (
     <div className="p-6 m-2 border rounded-2xl max-w-6xl mx-auto bg-gray-900 min-h-screen text-gray-100">
-      <div className='flex justify-center'>
+      <div className='flex justify-center border-b border-gray-700 mb-8'>
         <h1 className="text-4xl w-fit font-bold mb-8 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
           How It Works
         </h1>

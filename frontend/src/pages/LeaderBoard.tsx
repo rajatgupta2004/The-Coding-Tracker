@@ -106,7 +106,7 @@ const LeaderBoard: React.FC = () => {
               {reloadMessage}
             </span>
           )}
-          <div className='flex justify-center space-x-1 w-full'>
+          <div className='flex justify-center space-x-1 w-full '>
             <h1 className="text-4xl w-fit font-bold mb-4 md:mb-0 bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text text-transparent">
               Leaderboard
             </h1>
@@ -140,7 +140,7 @@ const LeaderBoard: React.FC = () => {
           
           <div className='flex flex-col p-1 min-w-[120px]'>
           <select
-            className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
+            className="bg-gray-800 hover:cursor-pointer px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
             value={selectedYear}
             onChange={e => setSelectedYear(e.target.value)}
           >
@@ -154,7 +154,7 @@ const LeaderBoard: React.FC = () => {
           </div>
           <div className='flex flex-col p-1'>
           <select
-            className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
+            className="bg-gray-800 px-4 hover:cursor-pointer py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
             value={selectedBranch}
             onChange={e => setSelectedBranch(e.target.value)}
           >
@@ -168,7 +168,7 @@ const LeaderBoard: React.FC = () => {
           </div>
           <div className='flex flex-col p-1  min-w-[120px]'>
             <select
-              className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
+              className="bg-gray-800 px-4 py-3 hover:cursor-pointer border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
               value={selectedSection}
               onChange={e => setSelectedSection(e.target.value)}
             >

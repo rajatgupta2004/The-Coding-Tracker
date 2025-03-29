@@ -1,319 +1,440 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell,
-  Line,
-  ResponsiveContainer,
-} from 'recharts';
-import { ContextType } from '../types';
-import { LineChart, Download } from 'lucide-react';
-import { Card, Button } from '@mui/material';
-import { SectionwiseYearwise, Platformwise, TopPerformers } from '../components/Components';
+import UserData, { ContextType } from '../types';
 import * as XLSX from 'xlsx';
-
-interface TrendData {
-  date: string;
-  total: number;
-  lcTotal: number;
-  cfTotal: number;
-  ccTotal: number;
-  ggTotal: number;
-};
+import { DataSummary, PassingYearPerformanceChart, PerformanceTrendChart, PlatformDistributionChart, SectionPerformanceChart, StatsCards, SummaryStatistics, TopPerformers } from '../components/Components';
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab from '@mui/joy/Tab';
+import TabPanel from '@mui/joy/TabPanel';
 
 const Analytics: React.FC = () => {
   const { sampleData } = useOutletContext<ContextType>();
-  const [selectedSection, setSelectedSection] = useState('All');
-  const [selectedYear, setSelectedYear] = useState('All');
-  const [selectedBranch, setSelectedBranch] = useState('All');
-  const [selectedFilterYear, setSelectedFilterYear] = useState<string>('Current');
-  const [selectedFilterMonth, setSelectedFilterMonth] = useState<string>('Current');
-  
-  const sections = ['All', ...Array.from(new Set(sampleData.map((user) => user.section))).sort()];
-  const years = ['All', ...Array.from(new Set(sampleData.map((user) => user.passingYear))).sort()];
-  const branches = ['All', ...Array.from(new Set(sampleData.map((user) => user.branch))).sort()];
-  
-  // Get available years and months from history
-  const availableYears = ['Current', ...Array.from(new Set(
-    sampleData.flatMap(user => 
-      user.history.map(entry => entry.year)
-    )
-  )).sort()];
-  
-  const availableMonths = ['Current', ...Array.from(new Set(
-    sampleData.flatMap(user => 
-      user.history.map(entry => entry.month)
-    )
-  )).sort()];
 
-  // Filter data based on selections
-  const filteredData = useMemo(() => {
-    return sampleData.filter(user => {
-      // Filter by user properties
-      const matchesSection = selectedSection === 'All' || user.section === selectedSection;
-      const matchesYear = selectedYear === 'All' || user.passingYear === selectedYear;
-      const matchesBranch = selectedBranch === 'All' || user.branch === selectedBranch;
-      // Filter by history month/year if specified
-      let matchesHistory = true;
-      if (selectedFilterYear !== 'Current' || selectedFilterMonth !== 'Current') {
-        matchesHistory = user.history.some(entry => {
-          const matchesHistoryYear = selectedFilterYear === 'Current' || entry.year === selectedFilterYear;
-          const matchesHistoryMonth = selectedFilterMonth === 'Current' || entry.month === selectedFilterMonth;
-          return matchesHistoryYear && matchesHistoryMonth;
-        });
-      }
-      return matchesSection && matchesYear && matchesBranch && matchesHistory;
-    });
-  }, [sampleData, selectedSection, selectedYear, selectedBranch, selectedFilterYear, selectedFilterMonth]);
 
-  // Function to download data as Excel
+  // State management
+  const [filteredData, setFilteredData] = useState<UserData[]>([]);
+  const [branch, setBranch] = useState<string>('All');
+  const [section, setSection] = useState<string>('All');
+  const [year, setYear] = useState<string>('All');
+  const [platform, setPlatform] = useState<string>('All');
+  const [search, setSearch] = useState<string>('');
+  const [fromDate, setFromDate] = useState<string>('2025-01');
+  const [toDate, setToDate] = useState<string>('2025-03');
+  const [showData, setShowData] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [platformTotals, setPlatformTotals] = useState({});
+  const [minProblems, setMinProblems] = useState<number>(0);
+  const [allTime, setAllTime] = useState<true | false>(false);
+
+
+  // Extract unique values from sampleData
+  const availableBranches = useMemo(() => {
+    const branches = new Set(sampleData.map(user => user.branch));
+    return ['All', ...Array.from(branches).sort()];
+  }, [sampleData]);
+
+  const availableSections = useMemo(() => {
+    const sections = new Set(sampleData.map(user => user.section));
+    return ['All', ...Array.from(sections).sort()];
+  }, [sampleData]);
+
+  const availableYears = useMemo(() => {
+    const years = new Set(sampleData.map(user => user.passingYear));
+    return ['All', ...Array.from(years).sort()];
+  }, [sampleData]);
+
+
+
+  console.log('Platform totals useState', platformTotals);
   const downloadExcel = () => {
-    // Prepare data for download
-    const dataToExport = filteredData.map(user => {
-      // Find the specific history entry if filtered
-      let historyEntry = user.history[0]; // default to first entry
-      if (selectedFilterYear !== 'Current' || selectedFilterMonth !== 'Current') {
-        historyEntry = user.history.find(entry => {
-          const matchesYear = selectedFilterYear === 'Current' || entry.year === selectedFilterYear;
-          const matchesMonth = selectedFilterMonth === 'Current' || entry.month === selectedFilterMonth;
-          return matchesYear && matchesMonth;
-        }) || user.history[0];
-      }
-      
-      return {
-        Name: user.name,
-        Roll: user.roll,
-        Passing_Year: user.passingYear,
-        Branch: user.branch,
-        Section: user.section,
-        'LeetCode Easy': historyEntry.lcEasy,
-        'LeetCode Medium': historyEntry.lcMedium,
-        'LeetCode Hard': historyEntry.lcHard,
-        'LeetCode Total': historyEntry.lcTotal,
-        'CodeForces Rank': historyEntry.cfRank,
-        'CodeForces Rating': historyEntry.cfRating,
-        'CodeForces Total': historyEntry.cfTotal,
-        'CodeChef Rank': historyEntry.ccRank,
-        'CodeChef Rating': historyEntry.ccRating,
-        'CodeChef Total': historyEntry.ccTotal,
-        'GeeksforGeeks Total': historyEntry.ggTotal,
-        'Total Score': historyEntry.Total,
-        Month: historyEntry.month,
-        Year: historyEntry.year
-      };
-    });
+    const excelData = filteredData.map((user) => ({
+      Name: user.name,
+      Roll: user.roll,
+      Branch: user.branch,
+      Section: user.section,
+      Passing_Year: user.passingYear,
+      From_date: fromDate,
+      To_date: toDate,
+      [platform]: user.Total
+    }));
 
-    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "StudentData");
-    
-    // Generate file name based on filters
-    let fileName = 'StudentData';
-    if (selectedFilterYear !== 'Current') fileName += `_${selectedFilterYear}`;
-    if (selectedFilterMonth !== 'Current') fileName += `_${selectedFilterMonth}`;
-    if (selectedBranch !== 'All') fileName += `_${selectedBranch}`;
-    if (selectedSection !== 'All') fileName += `_${selectedSection}`;
-    
-    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Analytics Data');
+    XLSX.writeFile(workbook, 'analytics_data.xlsx');
   };
 
-  // Summary Statistics
-  const totalUsers = filteredData.length;
 
-  // Year-wise Analysis
-  const yearData = filteredData.reduce((acc, user) => {
-    if (!acc[user.passingYear]) {
-      acc[user.passingYear] = { total: 0, count: 0 };
+  const applyFilters = () => {
+    if (!allTime && fromDate > toDate) {
+      setError('⚠️ Invalid date range! Start date cannot be greater than end date.');
+      setShowData(false);
+      return;
+    } else if (!allTime && fromDate == toDate) {
+      setError('⚠️ Invalid date range! Start date cannot be Equal to end date.');
+      setShowData(false);
+      return;
     }
-    acc[user.passingYear].total += user.Total;
-    acc[user.passingYear].count += 1;
-    return acc;
-  }, {} as { [key: string]: { total: number; count: number } });
+    let processedData = sampleData;
+    // Filter by name
 
-  const yearChartData = Object.keys(yearData).map(year => ({
-    year,
-    average: yearData[year].total / yearData[year].count,
-  }));
-
-  // Branch-wise Analysis
-  const branchData = filteredData.reduce((acc, user) => {
-    if (!acc[user.branch]) {
-      acc[user.branch] = { total: 0, count: 0 };
+    if (search) {
+      processedData = processedData.filter((user) =>
+        user.name.toLowerCase().includes(search.toLowerCase())
+      );
     }
-    acc[user.branch].total += user.Total;
-    acc[user.branch].count += 1;
-    return acc;
-  }, {} as { [key: string]: { total: number; count: number } });
 
-  const branchChartData = Object.keys(branchData).map(branch => ({
-    branch,
-    average: branchData[branch].total / branchData[branch].count,
-  }));
+    // Filter by branch, section, and year
+    if (branch !== 'All') processedData = processedData.filter((user) => user.branch === branch);
+    if (section !== 'All')
+      processedData = processedData.filter((user) => user.section === section);
+    if (year !== 'All') processedData = processedData.filter((user) => user.passingYear === year);
 
-  // Top 5 Branches
-  const topBranches = branchChartData.sort((a, b) => b.average - a.average).slice(0, 5);
+    // Filter and calculate the correct total problems between fromDate and toDate
+    processedData = processedData.map((user) => {
+      // Get total before the start date
+      const totalBeforeStart = user.history
+        .filter((h) => `${h.year}-${h.month.padStart(2, '0')}` === fromDate)
+        .reduce(
+          (sum, h) =>
+            sum +
+            h.lcTotal +
+            h.cfTotal +
+            h.ccTotal +
+            h.ggTotal,
+          0
+        );
 
-  // Section-wise Analysis
-  const sectionData = filteredData.reduce((acc, user) => {
-    if (!acc[user.section]) {
-      acc[user.section] = { total: 0, count: 0 };
+      // Get total until the end date
+      const totalUntilEnd = user.history
+        .filter((h) => `${h.year}-${h.month.padStart(2, '0')}` === toDate)
+        .reduce(
+          (sum, h) =>
+            sum +
+            h.lcTotal +
+            h.cfTotal +
+            h.ccTotal +
+            h.ggTotal,
+          0
+        );
+
+      // Correct total problems solved in the range
+      const filteredTotal = allTime?user.Total: totalUntilEnd - totalBeforeStart;
+      return { ...user, Total: filteredTotal };
+    });
+
+    // Corrected platform-specific logic in processedprocessedData
+    if (platform !== 'All') {
+      processedData = processedData.map((user) => {
+        const totalBeforeStart = user.history
+          .filter((h) => `${h.year}-${h.month.padStart(2, '0')}` === fromDate)
+          .reduce(
+            (sum, h) =>
+              sum +
+              (platform === 'LeetCode'
+                ? h.lcTotal
+                : platform === 'CodeForces'
+                  ? h.cfTotal
+                  : platform === 'CodeChef'
+                    ? h.ccTotal
+                    : h.ggTotal),
+            0
+          );
+
+        const totalUntilEnd = user.history
+          .filter((h) => `${h.year}-${h.month.padStart(2, '0')}` === toDate)
+          .reduce(
+            (sum, h) =>
+              sum +
+              (platform === 'LeetCode'
+                ? h.lcTotal
+                : platform === 'CodeForces'
+                  ? h.cfTotal
+                  : platform === 'CodeChef'
+                    ? h.ccTotal
+                    : h.ggTotal),
+            0
+          );
+
+        // Correct platform-specific total using subtraction
+        let filteredTotal = totalUntilEnd - totalBeforeStart;
+        if(allTime && platform === 'LeetCode'){
+          filteredTotal = user.lcTotal;
+        }else if(allTime && platform === 'CodeForces'){
+          filteredTotal = user.cfTotal;
+        }else if(allTime && platform === 'CodeChef'){
+          filteredTotal = user.ccTotal;
+        }else if(allTime){
+          filteredTotal = user.ggTotal;
+        }
+        return { ...user, Total: filteredTotal };
+      });
     }
-    acc[user.section].total += user.Total;
-    acc[user.section].count += 1;
-    return acc;
-  }, {} as { [key: string]: { total: number; count: number } });
-
-  const sectionChartData = Object.keys(sectionData).map(section => ({
-    section,
-    average: sectionData[section].total / sectionData[section].count,
-  }));
-
-  // Top Performers
-  const topPerformers = filteredData.sort((a, b) => b.Total - a.Total).slice(0, 5);
 
 
-  // Calculate total problems solved based on filters
-  const totalProblemsSolved = useMemo(() => {
-    return filteredData.reduce((total, user) => {
-      // Find the matching history entry based on filters
-      let historyEntry = user.history[0]; // default to first entry
-      if (selectedFilterYear !== 'Current' || selectedFilterMonth !== 'Current') {
-        historyEntry = user.history.find(entry => {
-          const matchesYear = selectedFilterYear === 'Current' || entry.year === selectedFilterYear;
-          const matchesMonth = selectedFilterMonth === 'Current' || entry.month === selectedFilterMonth;
-          return matchesYear && matchesMonth;
-        }) || user.history[0];
-      }
-      return total + (historyEntry?.Total || 0);
-    }, 0);
-  }, [filteredData, selectedFilterYear, selectedFilterMonth]);
+    if (processedData.length === 0) {
+      setError('⚠️ No matching records found! Please try different filters.');
+      setShowData(false);
+      return;
+    }
+
+    if (minProblems > 0) {
+      processedData = processedData.filter((user) => user.Total >= minProblems);
+    }
+
+    setError(null);
+    const getPlatformTotals = (platform: string) => {
+      return processedData.reduce((sum, user) => {
+        const totalBeforeStart = user.history
+          .filter((h: any) => `${h.year}-${h.month.padStart(2, '0')}` === fromDate)
+          .reduce(
+            (total: any, h: any) =>
+              total + 
+              (platform === 'LeetCode'
+                ? h.lcTotal
+                : platform === 'CodeForces'
+                  ? h.cfTotal
+                  : platform === 'CodeChef'
+                    ? h.ccTotal
+                    : h.ggTotal),
+            0
+          );
+
+        const totalUntilEnd = user.history
+          .filter((h: any) => `${h.year}-${h.month.padStart(2, '0')}` === toDate)
+          .reduce(
+            (total: any, h: any) =>
+              total +
+            (
+              allTime ? (platform === 'LeetCode'
+                ? user.lcTotal
+                : platform === 'CodeForces'
+                  ? user.cfTotal
+                  : platform === 'CodeChef'
+                    ? user.ccTotal
+                    : user.ggTotal):
+                    (platform === 'LeetCode'
+                      ? h.lcTotal
+                      : platform === 'CodeForces'
+                        ? h.cfTotal
+                        : platform === 'CodeChef'
+                          ? h.ccTotal
+                          : h.ggTotal)
+            ),
+            0
+          );
+
+        // Correct platform-specific total by subtracting
+        const filteredTotal = totalUntilEnd - (allTime? 0:totalBeforeStart);
+        return sum + filteredTotal;
+      }, 0);
+    };
+
+    setPlatformTotals((prv) => ({ LeetCode: getPlatformTotals("LeetCode"), CodeForces: getPlatformTotals("CodeForces"), CodeChef: getPlatformTotals("CodeChef"), GFG: getPlatformTotals("GFG") }))
+    setFilteredData(processedData);
+    setShowData(true);
+  }
+
 
   return (
     <div className="p-6 m-2 border rounded-2xl max-w-6xl mx-auto bg-gray-900 min-h-screen text-gray-100">
-      <div className='flex justify-between items-center mb-8'>
-        <div className='flex items-center'>
-          <h1 className="text-4xl w-fit text-center font-bold bg-gradient-to-r from-blue-500 to-green-400 bg-clip-text text-transparent">
+      <div className="flex justify-between items-center mb-8">
+        <div className="w-full flex items-center justify-center p-1 pb-7 border-b border-gray-700">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-green-400 bg-clip-text text-transparent">
             Analytics Dashboard
           </h1>
-          <h1 className='text-3xl ml-2'>📈</h1>
+          <h1 className="text-3xl ml-2">📈</h1>
         </div>
-        <Button 
-          variant="contained" 
-          startIcon={<Download size={18} />}
-          onClick={downloadExcel}
-          className="bg-indigo-600 hover:bg-indigo-700"
-        >
-          Export Data
-        </Button>
+
       </div>
 
       {/* Filters */}
-      <div className="w-full rounded-lg mb-8 grid grid-cols-1 md:grid-cols-6 gap-4">
-        {/* Year and Month filters for history */}
-        <div className='flex flex-col p-1'>
-          <select
-            className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
-            value={selectedFilterYear}
-            onChange={e => setSelectedFilterYear(e.target.value)}
-          >
-            {availableYears.map(year => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-          <label className='ml-2 text-gray-400'>Data Year</label>
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <input
+          type="text"
+          placeholder="Search by student name"
+          className="p-2 bg-gray-800 border border-gray-600 rounded-lg"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          title='Search for Student'
+        />
+        <select
+          value={year}
+          onChange={(e) => setYear(e.target.value)}
+          title='Select Passout Year'
+          className="p-2 bg-gray-800 border border-gray-600 rounded-lg  hover:cursor-pointer"
+        >
+          {availableYears.map((yearOption) => (
+            <option key={yearOption} value={yearOption}>
+              {yearOption === 'All' ? 'All Years' : yearOption}
+            </option>
+          ))}
+        </select>
 
-        <div className='flex flex-col p-1'>
-          <select
-            className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
-            value={selectedFilterMonth}
-            onChange={e => setSelectedFilterMonth(e.target.value)}
-          >
-            {availableMonths.map(month => (
-              <option key={month} value={month}>
-                {month}
-              </option>
-            ))}
-          </select>
-          <label className='ml-2 text-gray-400'>Data Month</label>
-        </div>
+        <select
+          value={branch}
+          onChange={(e) => setBranch(e.target.value)}
+          title='Select Branch'
+          className="p-2 bg-gray-800 border border-gray-600 rounded-lg  hover:cursor-pointer"
+        >
+          {availableBranches.map((branchOption) => (
+            <option key={branchOption} value={branchOption}>
+              {branchOption === 'All' ? 'All Branches' : branchOption}
+            </option>
+          ))}
+        </select>
 
-        {/* User property filters */}
-        <div className='flex flex-col p-1'>
-          <select
-            className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
-            value={selectedYear}
-            onChange={e => setSelectedYear(e.target.value)}
-          >
-            {years.map(year => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-          <label className='ml-2 text-gray-400'>Passout Year</label>
-        </div>
-
-        <div className='flex flex-col p-1'>
-          <select
-            className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
-            value={selectedBranch}
-            onChange={e => setSelectedBranch(e.target.value)}
-          >
-            {branches.map(branch => (
-              <option key={branch} value={branch}>
-                {branch}
-              </option>
-            ))}
-          </select>
-          <label className='ml-2 text-gray-400'>Branch</label>
-        </div>
-
-        <div className='flex flex-col p-1'>
-          <select
-            className="bg-gray-800 px-4 py-3 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
-            value={selectedSection}
-            onChange={e => setSelectedSection(e.target.value)}
-          >
-            {sections.map(section => (
-              <option key={section} value={section}>
-                {section}
-              </option>
-            ))}
-          </select>
-          <label className='ml-2 text-gray-400'>Section</label>
-        </div>
+        <select
+          value={section}
+          onChange={(e) => setSection(e.target.value)}
+          title='Select Section'
+          className="p-2 bg-gray-800 border border-gray-600 rounded-lg  hover:cursor-pointer"
+        >
+          {availableSections.map((sectionOption) => (
+            <option key={sectionOption} value={sectionOption}>
+              {sectionOption === 'All' ? 'All Sections' : sectionOption}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {/* Summary Statistics */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-gray-800 p-4 rounded-lg shadow-md transition transform hover:scale-105">
-          <h2 className="text-lg font-semibold text-gray-300">Total Users</h2>
-          <p className="text-2xl font-bold text-indigo-400">{totalUsers}</p>
+      {/* Date Range */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div 
+        title='Check this to See All time Data'
+        className="p-2 bg-gray-800 border border-gray-600 rounded-lg flex items-center pl-3 space-x-2">
+          <input
+            type="checkbox"
+            checked={allTime}
+            onChange={() => setAllTime(!allTime)}
+            className="w-5 h-5 hover:cursor-pointer"
+            id='All-time'
+          />
+          <label className="text-gray-200 whitespace-nowrap hover:cursor-pointer" htmlFor='All-time'>All Time Data</label>
         </div>
-        <div className="bg-gray-800 p-4 rounded-lg shadow-md transition transform hover:scale-105">
-          <h2 className="text-lg font-semibold text-gray-300">Total Problems Solved</h2>
-          <p className="text-2xl font-bold text-emerald-400">{totalProblemsSolved}</p>
-        </div>
-        <div className="bg-gray-800 p-4 rounded-lg shadow-md transition transform hover:scale-105">
-          <h2 className="text-lg font-semibold text-gray-300">Total Branches</h2>
-          <p className="text-2xl font-bold text-blue-400">{Object.keys(branchData).length}</p>
-        </div>
-        <div className="bg-gray-800 p-4 rounded-lg shadow-md transition transform hover:scale-105">
-          <h2 className="text-lg font-semibold text-gray-300">Total Years</h2>
-          <p className="text-2xl font-bold text-green-400">{Object.keys(yearData).length}</p>
-        </div>
+        <input
+          type="month"
+          value={fromDate}
+          title='Select Starting Date'
+          onChange={(e) => setFromDate(e.target.value)}
+          className={`p-2 bg-gray-800 border border-gray-600 rounded-lg ${allTime ? 'cursor-not-allowed' : 'hover:cursor-pointer'
+            } text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:brightness-150`}
+          disabled={allTime}
+        />
+
+        <input
+          type="month"
+          value={toDate}
+          title='Select Ending Date'
+          onChange={(e) => setToDate(e.target.value)}
+          className={`p-2 bg-gray-800 border border-gray-600 rounded-lg ${allTime ? 'cursor-not-allowed' : 'hover:cursor-pointer'
+          } text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:brightness-150`}
+          disabled={allTime}
+        />
+        <select
+          value={platform}
+          onChange={(e) => setPlatform(e.target.value)}
+          title='Select Platform'
+          className="p-2 bg-gray-800 border border-gray-600 rounded-lg hover:cursor-pointer"
+        >
+          <option value="All">All Platforms</option>
+          <option value="LeetCode">LeetCode</option>
+          <option value="CodeForces">CodeForces</option>
+          <option value="CodeChef">CodeChef</option>
+          <option value="GFG">GFG</option>
+        </select>
+
+        <input
+          title='Enter the Minimum numbers of Problems Solved'
+          type="number"
+          placeholder="Minimum Problems Solved"
+          className="p-2 bg-gray-800 border border-gray-600 rounded-lg"
+          onChange={(e) => setMinProblems(Number(e.target.value))}
+        />
+
+      </div>
+      <div className='w-full inline-flex justify-center p-2 mb-8'>
+        <button
+          title='Click to Apply Filters'
+          onClick={applyFilters}
+          className="bg-blue-500 hover:bg-blue-600 hover:cursor-pointer text-white px-6 py-2 rounded-lg shadow-lg"
+        >
+          Apply Filters 🎯
+        </button>
+
       </div>
 
-      {/* Platform-wise */}
-      <Platformwise sampleData={filteredData}/>
 
-      {/* Section-wise & Year-wise */}
-      <SectionwiseYearwise yearChartData={yearChartData} sectionChartData={sectionChartData}/>
-      
-      {/* Top Performers */}
-      <TopPerformers topPerformers={topPerformers}/>
+      {/* Error Handling */}
+      {error && (
+        <div className="bg-red-600 p-3 mb-4 mt-10 text-white text-center rounded-lg">
+          {error}
+        </div>
+      )}
+
+      {showData &&
+        <>
+
+
+          <div className='bg-gray-900 p-2 border border-gray-600 rounded-xl'>
+
+            <Tabs
+              aria-label="Basic tabs"
+              defaultValue={0}
+              sx={{
+                backgroundColor: '#111827', // Equivalent to Tailwind bg-gray-800
+                borderRadius: '8px', // Optional rounded corners
+                padding: '8px', // Optional padding
+                color: '#fff', // Set text color to white
+              }}
+            >
+              <TabList
+                sx={{
+                  '& .MuiTab-root': {
+                    color: '#fff', // Default text color for tabs
+                    '&.Mui-selected': {
+                      color: '#111827', // Optional: Change color when selected (e.g., gold)
+                    },
+                  },
+                }}
+              >
+                <Tab>Table Data</Tab>
+                <Tab>Graph Data</Tab>
+              </TabList>
+
+              <TabPanel
+                value={0}
+                sx={{
+                  color: '#fff', // Text color inside the tab panel
+                }}
+              >
+                <SummaryStatistics platformTotals={platformTotals} />
+                <DataSummary filteredData={filteredData} downloadExcel={downloadExcel} platform={platform} />
+
+
+              </TabPanel>
+              <TabPanel
+                value={1}
+                sx={{
+                  color: '#fff',
+                }}
+              >
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 mb-8'>
+                  <PlatformDistributionChart platformTotals={platformTotals} />
+                  <PerformanceTrendChart data={filteredData} />
+                  <SectionPerformanceChart data={filteredData} />
+                  <PassingYearPerformanceChart data={filteredData} />
+
+                </div>
+              </TabPanel>
+            </Tabs>
+
+          </div>
+
+
+        </>
+      }
     </div>
   );
 };
