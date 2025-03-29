@@ -37,6 +37,8 @@ const UserModal: React.FC<{ user: UserData; onClose: () => void }> = ({ user, on
         const canvas = await html2canvas(modalRef.current, {
           useCORS: true,
           backgroundColor: "#020817",
+          allowTaint: false, // Prevents tainted canvas
+          scale: 2, // High resolution for better quality
         });
         // Save the image
         canvas.toBlob((blob) => {
@@ -116,7 +118,7 @@ const UserModal: React.FC<{ user: UserData; onClose: () => void }> = ({ user, on
           {/* LeetCode Stats */}
           <div className="bg-gray-700 p-4 rounded-lg">
             <Link target="_blank" to={"https://leetcode.com/u/" + user.lcUsername}>
-              <img src={platformImages["LeetCode"]} alt="LeetCode" />
+              <img  crossOrigin="anonymous" src={platformImages["LeetCode"]} alt="LeetCode" />
               <h3 className="text-lg font-semibold text-indigo-300 mb-3">LeetCode Stats</h3>
               {user.lcTotal === -1 ?
                 <h1 className="text-red-500 text-2xl">Wrong Username OOPs!</h1>
@@ -134,7 +136,7 @@ const UserModal: React.FC<{ user: UserData; onClose: () => void }> = ({ user, on
           {/* Codeforces Stats */}
           <div className="bg-gray-700 p-4 rounded-lg">
             <Link target="_blank" to={"https://codeforces.com/profile/" + user.cfUsername}>
-              <img src={platformImages["Codeforces"]} alt="Codeforces" />
+              <img  crossOrigin="anonymous" src={platformImages["Codeforces"]} alt="Codeforces" />
               <h3 className="text-lg font-semibold text-indigo-300 mb-3">Codeforces Stats</h3>
               {user.cfTotal === -1 ?
                 <h1 className="text-red-500 text-2xl">Wrong Username OOPs!</h1>
@@ -151,7 +153,7 @@ const UserModal: React.FC<{ user: UserData; onClose: () => void }> = ({ user, on
           {/* CodeChef Stats */}
           <div className="bg-gray-700 p-4 rounded-lg">
             <Link target="_blank" to={"https://codechef.com/users/" + user.ccUsername}>
-              <img width="30" height="30" src={platformImages["CodeChef"]} alt="CodeChef" />
+              <img  crossOrigin="anonymous" width="30" height="30" src={platformImages["CodeChef"]} alt="CodeChef" />
               <h3 className="text-lg font-semibold text-indigo-300 mb-3">CodeChef Stats</h3>
               {user.ccTotal === -1 ?
                 <h1 className="text-red-500 text-2xl">Wrong Username OOPs!</h1>
@@ -167,7 +169,7 @@ const UserModal: React.FC<{ user: UserData; onClose: () => void }> = ({ user, on
           {/* GFG Stats */}
           <div className="bg-gray-700 p-4 rounded-lg">
             <Link target="_blank" to={"https://www.geeksforgeeks.org/user/" + user.ggUsername}>
-              <img className="w-10 h-10" src={platformImages["GFG"]} alt="GFG" />
+              <img  crossOrigin="anonymous" className="w-10 h-10" src={platformImages["GFG"]} alt="GFG" />
               <h3 className="text-lg font-semibold text-indigo-300 mb-3">GfG Stats</h3>
               {user.ggTotal === -1 ?
                 <h1 className="text-red-500 text-2xl">Wrong Username OOPs!</h1>
@@ -183,11 +185,3 @@ const UserModal: React.FC<{ user: UserData; onClose: () => void }> = ({ user, on
 };
 
 export default UserModal;
-
-
-
-
-
-
-
-

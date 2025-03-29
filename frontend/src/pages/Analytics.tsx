@@ -411,8 +411,6 @@ const Analytics: React.FC = () => {
               >
                 <SummaryStatistics platformTotals={platformTotals} />
                 <DataSummary filteredData={filteredData} downloadExcel={downloadExcel} platform={platform} />
-
-
               </TabPanel>
               <TabPanel
                 value={1}

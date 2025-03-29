@@ -19,8 +19,7 @@ const AddUser = () => {
 
   return (
 
-    <div className="p-6 m-2 border rounded-2xl max-w-6xl mx-auto bg-gray-900 min-h-screen text-gray-100 border border-gray-700">
-
+    <div className="p-6 m-2 border rounded-2xl max-w-6xl mx-auto bg-gray-900 min-h-screen text-gray-100 ">
       <div className="pb-8 border-b border-gray-700">
         <div className="flex justify-center space-x-1">
           <h1 className="text-4xl font-bold w-fit bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
