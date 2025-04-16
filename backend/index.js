@@ -112,10 +112,10 @@ const addUsersFromExcel = async () => {
           // Push user data for insertion
           allUser.push({
             name: user.name.trim(),
-            roll: user.roll.trim(),
+            roll: user.roll,
             gmail: user.gmail.trim(),
-            phone: user.phone.trim(),
-            passingYear: user.passingYear.trim(),
+            phone: user.phone,
+            passingYear: user.passingYear,
             branch: user.branch.trim(),
             section: user.section.trim(),
             lcUsername: user.lcUsername.trim(),
