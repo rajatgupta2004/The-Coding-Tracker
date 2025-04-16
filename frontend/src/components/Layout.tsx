@@ -4,7 +4,7 @@ import { PanelBottomClose, PanelTopClose } from 'lucide-react';
 import { cn } from '../lib/util';
 import axios from 'axios';
 import UserData from '../types';
-const URL = "https://the-coding-tracker.vercel.app";
+const URL = "https://leetcode-tracker-1-ucio.onrender.com";
 const navigation = [
   { name: 'Leader Board', href: '/' },
   { name: 'Analytics', href: '/analytics' },
