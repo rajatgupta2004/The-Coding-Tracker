@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { PanelBottomClose, PanelTopClose } from 'lucide-react';
@@ -11,8 +12,6 @@ const navigation = [
   { name: 'Add User', href: '/adduser' },
   { name: 'How it Works?', href: '/howitworks' },
 ];
-
-
 
 export function Layout() {
   const [loading, setLoading] = useState(true);
@@ -37,7 +36,6 @@ export function Layout() {
 
   return (
     <div className="min-h-screen bg-blue-100 ">
-
       <nav className="bg-navy text-white z-50 sticky top-0">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
@@ -47,22 +45,21 @@ export function Layout() {
                 <span className="ml-2 flex w-full text-xl items-center font-bold">The Coding Tracker
                 </span>
               </Link>
-            </div>
-
+            </div>   
 
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 {navigation.map((item) => {
                   return (
                     <Link
-                      key={item.name}
-                      to={item.href}
-                      className={cn(
-                        'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                        location.pathname === item.href
-                          ? 'bg-health text-white'
-                          : 'text-gray-300 hover:bg-health/80 hover:text-white'
-                      )}
+                    key={item.name}
+                    to={item.href}
+                    className={cn(
+                      'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                      location.pathname === item.href
+                      ? 'bg-health text-white'
+                      : 'text-gray-300 hover:bg-health/80 hover:text-white'
+                    )}
                     >
                       {item.name}
                     </Link>
@@ -84,15 +81,15 @@ export function Layout() {
           {navigation.map((item) => {
             return (
               <Link
-                key={item.name}
-                to={item.href}
-                className={cn(
-                  'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                  location.pathname === item.href
-                    ? 'bg-health text-white'
-                    : 'text-gray-300 hover:bg-health/80 hover:text-white'
-                )}
-                onClick={() => setMobileMenuOpen(false)}
+              key={item.name}
+              to={item.href}
+              className={cn(
+                'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                location.pathname === item.href
+                ? 'bg-health text-white'
+                : 'text-gray-300 hover:bg-health/80 hover:text-white'
+              )}
+              onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
@@ -100,7 +97,8 @@ export function Layout() {
           })}
         </div>
       </nav>
-      <main>
+      <main >
+        
         <Outlet context={{ sampleData, loading, setSampleData }} />
       </main>
     </div>

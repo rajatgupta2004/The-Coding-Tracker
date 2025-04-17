@@ -4,7 +4,6 @@ async function codeforces(username) {
   if (!username || typeof username !== "string" || username.trim() === "") {
     return { status: "error", username, data: "Invalid username provided" };
   }
-
   let userdata = {
     maxRating: 0,
     maxRank: "Unrated",
@@ -37,17 +36,14 @@ async function codeforces(username) {
 
     if (userStatusResponse.data.status === "OK" && userStatusResponse.data.result.length > 0) {
       const submissions = userStatusResponse.data.result;
-
       // Use a Set to store unique problem IDs to avoid duplicates
       const solvedProblems = new Set();
-
       submissions.forEach((submission) => {
         if (submission.verdict === "OK" && submission.problem && submission.problem.contestId) {
           const problemId = `${submission.problem.contestId}-${submission.problem.index}`;
           solvedProblems.add(problemId);
         }
       });
-
       userdata.problemsSolved = solvedProblems.size;
     } else {
       throw new Error("Failed to fetch user submissions or no submissions found");

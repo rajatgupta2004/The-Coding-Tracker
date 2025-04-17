@@ -2,16 +2,16 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const reader = require('xlsx');
-const cheerio = require('cheerio');
+const cron = require('node-cron');
 
 const { User } = require('./db');
-const cron = require('node-cron');
 const codeforces = require('./routes/codeforces');
 const codechef = require('./routes/codechef');
 const gfg = require('./routes/gfg');
 const leetcode = require('./routes/leetcode');
 
 const app = express();
+
 require('dotenv').config()
 app.use(cors());
 app.use(express.json());
@@ -189,15 +189,12 @@ app.get('/codechef/:username',async (req,res)=>{
     res.send(result);
 })
 
-
 app.get('/data',async (req,res)=>{
     const data = await User.find();
     res.json({
         data
     });
 })
-
-
 
 // Function to refresh database (can be called manually or via timer)
 const refreshDatabase = async () => {
@@ -232,11 +229,6 @@ const refreshDatabase = async () => {
           lcEasy = lcRes.data.problems_solved[1].count;
           lcMedium = lcRes.data.problems_solved[2].count;
           lcHard = lcRes.data.problems_solved[3].count;
-        } else {
-          lcTotal = -1;
-          lcEasy = -1;
-          lcMedium = -1;
-          lcHard = -1;
         }
 
         // Codeforces data
@@ -244,8 +236,6 @@ const refreshDatabase = async () => {
           cfTotal = cfRes.data.problemsSolved;
           cfRating = cfRes.data.maxRating;
           cfRank = cfRes.data.maxRank;
-        } else {
-          cfTotal = -1;
         }
 
         // CodeChef data
@@ -253,15 +243,11 @@ const refreshDatabase = async () => {
           ccTotal = ccRes.data.problems_solved;
           ccRating = ccRes.data.rating_number;
           ccRank = ccRes.data.rating;
-        } else {
-          ccTotal = -1;
         }
 
         // GFG data
         if (ggRes.status === 'ok') {
           ggTotal = ggRes.data.problems_solved;
-        } else {
-          ggTotal = -1;
         }
 
         // Update the user's record in the database
@@ -280,10 +266,10 @@ const refreshDatabase = async () => {
               ccRating,
               ccRank,
               ggTotal,
+              Total:lcTotal+cfTotal+ggTotal+ccTotal,
             },
           }
         );
-
         console.log(`✅ Updated data for user: ${user.name}`);
         await delay(1000); // Add a delay to avoid rate limits
       } catch (error) {

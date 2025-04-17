@@ -5,6 +5,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import SchoolIcon from '@mui/icons-material/School';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 
+
 const HowItWorks: React.FC = () => {
   return (
     <div className="p-6 m-2 border rounded-2xl max-w-6xl mx-auto bg-gray-900 min-h-screen text-gray-100">
@@ -14,6 +15,7 @@ const HowItWorks: React.FC = () => {
         </h1>
         <h1 className='text-4xl'>🚀</h1>
       </div>
+
 
       <div className="grid md:grid-cols-2 gap-8 mb-12">
         {/* Data Collection Card */}

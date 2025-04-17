@@ -273,9 +273,9 @@ const LeaderBoard: React.FC = () => {
                       href={`https://auth.geeksforgeeks.org/user/${user.ggUsername}/`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-indigo-400 hover:text-indigo-300 transition-colors"
-                    >
-                      {user.ggTotal === -1 ? <h1 className='text-red-500'>N/A</h1> : user.ggTotal}
+                      className="text-indigo-400 hover:text-indigo-300 transition-colors">
+                        
+                    {user.ggTotal === -1 ? <h1 className='text-red-500'>N/A</h1> : user.ggTotal}
                     </a>
                   </td>
                   <td className="px-6 py-4 font-bold">{user.Total}</td>
@@ -286,8 +286,6 @@ const LeaderBoard: React.FC = () => {
         </div>
         <div className="mt-6 text-center text-gray-400 text-sm">* Rankings update automatically. Click column headers to sort.</div>
       </div>
-
-
     </>
   );
 };

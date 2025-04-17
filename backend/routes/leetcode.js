@@ -1,12 +1,10 @@
 const axios = require('axios');
 
 const leetcode = async (username) => {
-  // Validate the username
   if (!username || typeof username !== "string" || username.trim() === "") {
     return { status: "error", username, data: "Invalid username provided" };
   }
 
-  // Define the GraphQL query for LeetCode API
   const query = `
     {
       matchedUser(username: "${username}") {
@@ -42,7 +40,6 @@ const leetcode = async (username) => {
       }
     }
   `;
-
   try {
     // Send POST request to LeetCode GraphQL API
     const response = await axios.post(
