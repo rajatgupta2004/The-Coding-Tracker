@@ -46,7 +46,7 @@ async function codeforces(username) {
       });
       userdata.problemsSolved = solvedProblems.size;
     } else {
-      throw new Error("Failed to fetch user submissions or no submissions found");
+      return { status: "ok", username, data: userdata };
     }
   } catch (error) {
     return { status: "error", username, data: `Error fetching user submissions: ${error.message}` };
