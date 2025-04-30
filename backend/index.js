@@ -133,7 +133,7 @@ const addUsersFromExcel = async () => {
             ccTotal,
             ccRating,
             ccRank,
-            Total: lcTotal + cfTotal + ccTotal + ggTotal,
+            Total: (lcTotal===-1?0:lcTotal) + (cfTotal===-1?0:cfTotal) + (ccTotal===-1?0:ccTotal) + (ggTotal===-1?0:ggTotal),
           });
   
           await delay(5); // Add slight delay to avoid rate limits
@@ -268,7 +268,7 @@ const refreshDatabase = async () => {
               ccRating,
               ccRank,
               ggTotal,
-              Total:lcTotal+cfTotal+ggTotal+ccTotal,
+              Total:(lcTotal===-1?0:lcTotal) + (cfTotal===-1?0:cfTotal) + (ccTotal===-1?0:ccTotal) + (ggTotal===-1?0:ggTotal),
             },
           }
         );
