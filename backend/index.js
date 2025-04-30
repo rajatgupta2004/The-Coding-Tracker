@@ -209,6 +209,8 @@ const refreshDatabase = async () => {
         const ccRes = await codechef(user.ccUsername);
         const cfRes = await codeforces(user.cfUsername);
         const lcRes = await leetcode(user.lcUsername);
+        console.log("fetching data for  ",user.name);
+        console.log(ccRes);
 
         // Initialize variables to store updated data
         let lcTotal = user.lcTotal;

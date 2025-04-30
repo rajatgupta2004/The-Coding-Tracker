@@ -39,7 +39,6 @@ const AddUser = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="Rajat Gupta"
                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -51,7 +50,6 @@ const AddUser = () => {
                 </label>
                 <input
                   type="email"
-                  placeholder="rajat@gmail.com"
                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -63,7 +61,6 @@ const AddUser = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="9838765874"
                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -134,7 +131,6 @@ const AddUser = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="rajatgupta05"
                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
                   onChange={(e) => setLcUsername(e.target.value)}
                 />
@@ -153,7 +149,6 @@ const AddUser = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="rajatgupta05"
                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
                   onChange={(e) => setCfUsername(e.target.value)}
                 />
@@ -172,7 +167,6 @@ const AddUser = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="rajatgupta05"
                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
                   onChange={(e) => setCcUsername(e.target.value)}
                 />
@@ -191,7 +185,6 @@ const AddUser = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="rajatgupta05"
                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
                   onChange={(e) => setGgUsername(e.target.value)}
                 />
