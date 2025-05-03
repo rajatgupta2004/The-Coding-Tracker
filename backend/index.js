@@ -51,19 +51,26 @@ const addUsersFromExcel = async () => {
     for (const user of sampleData) {
       try {
         // Check if the user already exists
+
+        const lcUsername = String(user.lcUsername || '').trim();
+        const cfUsername = String(user.cfUsername || '').trim();
+        const ccUsername = String(user.ccUsername || '').trim();
+        const ggUsername = String(user.ggUsername || '').trim();
+
         const isUsername = await User.findOne({
-          lcUsername: user.lcUsername.trim(),
-          cfUsername: user.cfUsername.trim(),
-          ccUsername: user.ccUsername.trim(),
-          ggUsername: user.ggUsername.trim(),
+          lcUsername,
+          cfUsername,
+          ccUsername,
+          ggUsername,
         });
+  
   
         if (!isUsername) {
           // Fetch user data from different platforms
-          const ggRes = await gfg(user.ggUsername.trim());
-          const ccRes = await codechef(user.ccUsername.trim());
-          const cfRes = await codeforces(user.cfUsername.trim());
-          const lcRes = await leetcode(user.lcUsername.trim());
+          const ggRes = await gfg(ggUsername);
+          const ccRes = await codechef(ccUsername);
+          const cfRes = await codeforces(cfUsername);
+          const lcRes = await leetcode(lcUsername);
   
           // Initialize variables
           let lcTotal = 0, lcEasy = 0, lcMedium = 0, lcHard = 0;
@@ -111,17 +118,17 @@ const addUsersFromExcel = async () => {
   
           // Push user data for insertion
           allUser.push({
-            name: user.name.trim(),
+            name: String(user.name || '').trim(),
             roll: user.roll,
-            gmail: user.gmail.trim(),
+            gmail: String(user.gmail || '').trim(),
             phone: user.phone,
             passingYear: user.passingYear,
-            branch: user.branch.trim(),
-            section: user.section.trim(),
-            lcUsername: user.lcUsername.trim(),
-            cfUsername: user.cfUsername.trim(),
-            ccUsername: user.ccUsername.trim(),
-            ggUsername: user.ggUsername.trim(),
+            branch: String(user.branch || '').trim(),
+            section: String(user.section || '').trim(),
+            lcUsername,
+            cfUsername,
+            ccUsername,
+            ggUsername,
             lcTotal,
             lcEasy,
             lcMedium,
@@ -133,13 +140,16 @@ const addUsersFromExcel = async () => {
             ccTotal,
             ccRating,
             ccRank,
-            Total: (lcTotal===-1?0:lcTotal) + (cfTotal===-1?0:cfTotal) + (ccTotal===-1?0:ccTotal) + (ggTotal===-1?0:ggTotal),
+            Total: (lcTotal === -1 ? 0 : lcTotal) +
+                   (cfTotal === -1 ? 0 : cfTotal) +
+                   (ccTotal === -1 ? 0 : ccTotal) +
+                   (ggTotal === -1 ? 0 : ggTotal),
           });
   
           await delay(5); // Add slight delay to avoid rate limits
         }
       } catch (error) {
-        console.error(`❌ Error adding user ${user.name.trim()}:`, error);
+        console.error(`❌ Error adding user ${String(user.name || '').trim()}:`, error);
       }
     }
   
