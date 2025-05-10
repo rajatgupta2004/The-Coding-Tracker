@@ -11,8 +11,6 @@
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Local Setup for Developers](#local-setup-for-developers)
-- [How to Contribute?](#how-to-contribute)
-
 ---
 
 # Overview
