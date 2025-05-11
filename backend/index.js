@@ -50,7 +50,6 @@ const addUsersFromExcel = async () => {
     const allUser = [];
     for (const user of sampleData) {
       try {
-        // Check if the user already exists
 
         const lcUsername = String(user.lcUsername || '').trim();
         const cfUsername = String(user.cfUsername || '').trim();
@@ -66,19 +65,16 @@ const addUsersFromExcel = async () => {
   
   
         if (!isUsername) {
-          // Fetch user data from different platforms
           const ggRes = await gfg(ggUsername);
           const ccRes = await codechef(ccUsername);
           const cfRes = await codeforces(cfUsername);
           const lcRes = await leetcode(lcUsername);
   
-          // Initialize variables
           let lcTotal = 0, lcEasy = 0, lcMedium = 0, lcHard = 0;
           let cfTotal = 0, cfRating = 0, cfRank = '';
           let ccTotal = 0, ccRating = 0, ccRank = '';
           let ggTotal = 0;
   
-          // LeetCode Data
           if (lcRes.status === 'ok') {
             lcTotal = lcRes.data.problems_solved[0].count;
             lcEasy = lcRes.data.problems_solved[1].count;
@@ -91,7 +87,6 @@ const addUsersFromExcel = async () => {
             lcHard = -1;
           }
   
-          // Codeforces Data
           if (cfRes.status === 'ok') {
             cfTotal = cfRes.data.problemsSolved;
             cfRating = cfRes.data.maxRating;
@@ -100,7 +95,6 @@ const addUsersFromExcel = async () => {
             cfTotal = -1;
           }
   
-          // CodeChef Data
           if (ccRes.status === 'ok') {
             ccTotal = ccRes.data.problems_solved;
             ccRating = ccRes.data.rating_number;
@@ -108,15 +102,12 @@ const addUsersFromExcel = async () => {
           } else {
             ccTotal = -1;
           }
-  
-          // GFG Data
           if (ggRes.status === 'ok') {
             ggTotal = ggRes.data.problems_solved;
           } else {
             ggTotal = -1;
           }
   
-          // Push user data for insertion
           allUser.push({
             name: String(user.name || '').trim(),
             roll: user.roll,
@@ -145,15 +136,14 @@ const addUsersFromExcel = async () => {
                    (ccTotal === -1 ? 0 : ccTotal) +
                    (ggTotal === -1 ? 0 : ggTotal),
           });
-  
-          await delay(5); // Add slight delay to avoid rate limits
+
+          await delay(5);
         }
       } catch (error) {
         console.error(`❌ Error adding user ${String(user.name || '').trim()}:`, error);
       }
     }
   
-    // Insert all gathered users into the database
     if (allUser.length > 0) {
       const result = await User.insertMany(allUser);
       console.log(`✅ ${result.length} new users added successfully.`);
