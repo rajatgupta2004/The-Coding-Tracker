@@ -15,7 +15,7 @@
 
 # Overview
 
-![Hero Preview](<img width="2560" height="1440" alt="Black Gradient Minimalistic Future Technology YouTube Banner (1)" src="https://github.com/user-attachments/assets/b2ea8c22-a223-408a-a062-e59bcd211d76" />)
+![Hero Preview](https://github.com/user-attachments/assets/b2ea8c22-a223-408a-a062-e59bcd211d76)
 
 
 **The Coding Tracker** is a real-time dashboard that tracks students' coding activity across platforms like LeetCode, Codeforces, GFG, and CodeChef.
@@ -29,7 +29,7 @@ Built for institutions, it highlights top performers and supports data-driven ev
 # Features
 
 ## 1. Leaderboard
-![Leaderboard Preview](<img width="2560" height="1440" alt="2" src="https://github.com/user-attachments/assets/be2c8531-a51a-4df2-8df5-d3a4d34168e2" />
+![Leaderboard Preview](https://github.com/user-attachments/assets/be2c8531-a51a-4df2-8df5-d3a4d34168e2
 )
 ---
 
@@ -42,7 +42,7 @@ Built for institutions, it highlights top performers and supports data-driven ev
 
 ---
 ## 2. Smart Username Validation
-![Username error](<img width="2560" height="1440" alt="3" src="https://github.com/user-attachments/assets/9141e9e5-3b73-4eb3-a971-7a42baaa5a3f" />
+![Username error](https://github.com/user-attachments/assets/9141e9e5-3b73-4eb3-a971-7a42baaa5a3f
 )
 
 Automatically detects and flags invalid or misspelled usernames during data entry.
@@ -51,7 +51,7 @@ Helpful messages guide users to correct their inputs instantly.
 
 
 ## 3.  Comprehensive Analytics Dashboard
-![Analytics Dashboard](<img width="2560" height="1440" alt="4" src="https://github.com/user-attachments/assets/588fe14b-7f34-4f9b-aa82-253f5fa2c6b3" />
+![Analytics Dashboard](https://github.com/user-attachments/assets/588fe14b-7f34-4f9b-aa82-253f5fa2c6b3
 )
 
 
@@ -60,7 +60,7 @@ Supports filtering by year, branch, or month for targeted academic evaluations.
 
 
 ## 4. Smart Analytics with Graphs & Detailed Data
-![Smart Analysis](<img width="2560" height="1440" alt="5" src="https://github.com/user-attachments/assets/c1a3e022-b45a-4e32-a2d6-b7b402016779" />
+![Smart Analysis](https://github.com/user-attachments/assets/c1a3e022-b45a-4e32-a2d6-b7b402016779
 )
 
 Get a clear picture of students progress with insightful graphs and in-depth stats.
@@ -69,7 +69,7 @@ Designed for mentors to make data-driven decisions with ease.
 
 
 ## 5. Easy Student Data Integration
-![adding student data](<img width="2560" height="1440" alt="6" src="https://github.com/user-attachments/assets/a5ab606c-2b0b-4c7b-a9e4-c27fce95e90a" />
+![adding student data](https://github.com/user-attachments/assets/a5ab606c-2b0b-4c7b-a9e4-c27fce95e90a
 )
 Seamlessly add student data through a connected Google Form or directly from the platform.
 This ensures quick onboarding and effortless management of large student batches.
