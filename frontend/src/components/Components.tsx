@@ -187,8 +187,6 @@ export const TopPerformers = ({ data }: { data: UserData[] }) => {
   );
 };
 
-
-
 export const PlatformDistributionChart = ({ platformTotals }: { platformTotals: any }) => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
   const data = Object.entries(platformTotals)
@@ -224,9 +222,6 @@ export const PlatformDistributionChart = ({ platformTotals }: { platformTotals: 
 
   );
 };
-
-
-
 
 export const DataSummary = ({ filteredData, downloadExcel,platform }: { filteredData: UserData[], downloadExcel: any ,platform:string}) => {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
@@ -319,6 +314,7 @@ export const DataSummary = ({ filteredData, downloadExcel,platform }: { filtered
     </div>
   );
 };
+
 export const SummaryStatistics = ({ platformTotals }: { platformTotals: any }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 mt-8">
@@ -349,3 +345,4 @@ export const SummaryStatistics = ({ platformTotals }: { platformTotals: any }) =
     </div>
   )
 }
+

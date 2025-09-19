@@ -20,7 +20,6 @@ const PORT = process.env.PORT || 3000;
 
 const spreadsheetId = process.env.SpreadSheet_ID;
 const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=xlsx`;
- 
 async function refreshStudentsData() {
   try {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
@@ -42,8 +41,6 @@ async function refreshStudentsData() {
 }
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-
 const addUsersFromExcel = async () => {
     console.log('🚀 Adding new users from Excel...');
     const sampleData = await refreshStudentsData(); // Fetch Excel data
@@ -136,10 +133,9 @@ const addUsersFromExcel = async () => {
                    (ccTotal === -1 ? 0 : ccTotal) +
                    (ggTotal === -1 ? 0 : ggTotal),
           });
-
           await delay(5);
         }
-      } catch (error) {
+      } catch (error){
         console.error(`❌ Error adding user ${String(user.name || '').trim()}:`, error);
       }
     }
