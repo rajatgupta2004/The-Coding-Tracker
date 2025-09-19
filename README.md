@@ -15,7 +15,8 @@
 
 # Overview
 
-![Hero Preview](https://media-hosting.imagekit.io/8949066cbbbc48a7/1.png?Expires=1841498855&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=t71gMw0QWbL5Vk7lq5gTRcxb6EnIEfWsTCON-rrZcYith8K3ig-zEzwk~m1I2jJwqilI-rjcmK5P8BCtBL5~82sw5xlMrO-YGGAFKZF03O5ZvUr~Tch5XR3W1QC-kTIAGleMIZm~k2CwU0bYd68DyFYqpFxHKBk6wMp0bWmHkL51QXmJ0BfUG~ZwrugTU2544J3XYF7zLTRPHspyNJfykslT3h3hrVQCxK4lFbJvj9dLeljZkQn-BNje-tNB0M2BFlrplbpkVDirKpKFeIL76j1gSg7sbgUoCfErzDd83hNCNo6wARIv2MhuV-Re~oYeY72mrlPkjg1hrGiTMrSn-Q__)
+![Hero Preview](https://github.com/user-attachments/assets/b2ea8c22-a223-408a-a062-e59bcd211d76)
+
 
 **The Coding Tracker** is a real-time dashboard that tracks students' coding activity across platforms like LeetCode, Codeforces, GFG, and CodeChef.
  
@@ -28,7 +29,8 @@ Built for institutions, it highlights top performers and supports data-driven ev
 # Features
 
 ## 1. Leaderboard
-![Leaderboard Preview](https://media-hosting.imagekit.io/e9faf493119a43ba/2.png?Expires=1841500599&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=yAmuyPjGXytme0AVimBFzsEpSS25n1WeBrPVURZ3qsMsyXO~8NOVIK9Quzrvi6rean6mcgemjuzUiZFbHl1vO5821~nuIFMstG2zkt5wywgkxwj22yGjA6y4TJe0Vwo6z2IijuE90y9DJyFUP4j3hy9CHXCa8l3oaSMe-OR83PpsqCnBO6HEWh~KoJqeWEFDp7raZfwiW-GfOoe3yurmVun58N2-mw26Y88SsFZBvoTpHA5WSs53FUFw6NBKBUrx2ZoWApYrAHKuF~EfjP2Q7f9gEh6pWlD-k9VYlwVgMtaZszflYIjKthvtdNNMGuJR~yTY54RxXRhlwoDzQfk67w__)
+![Leaderboard Preview](https://github.com/user-attachments/assets/be2c8531-a51a-4df2-8df5-d3a4d34168e2
+)
 ---
 
 * View all users’ competitive programming stats in one place
@@ -40,7 +42,8 @@ Built for institutions, it highlights top performers and supports data-driven ev
 
 ---
 ## 2. Smart Username Validation
-![Username error](https://media-hosting.imagekit.io/e6333855e45242fe/3.png?Expires=1841498867&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=QKgQ-lMLffmUvMoDpTZmvEpOusKb0SIEKYv~FqUjoz4iBkvuv5vQs3LJQFUDvViMnSVDcic9-uDnxOx5sKoosLHPTtzK93YSDCeAa2S8ZA5qFLNRtFltpeXct-Dyy2aKf~r5ZdLxJ2748NNeC5kggU7R1vwLNjQpI2FJnFdUvtEtwjWHtPcgZr1dZJg1aSqoMGjIS~GQjd4DvwSb0QbYmN0eR56ABFfDFnqnWU1DGy8S~eXnkqKyoDwn8OEklvNKLy1kOd95wx1nNKTuqmhKR2cvHjYZfvlq0Hw8QEsNMFafPBf8A68Ln4NcqL6l-qG7~hU--UsY7j0aVID9QBL-FA__)
+![Username error](https://github.com/user-attachments/assets/9141e9e5-3b73-4eb3-a971-7a42baaa5a3f
+)
 
 Automatically detects and flags invalid or misspelled usernames during data entry.
 Ensures only valid platform handles are tracked, preventing errors in analytics and leaderboard rankings.
@@ -48,7 +51,8 @@ Helpful messages guide users to correct their inputs instantly.
 
 
 ## 3.  Comprehensive Analytics Dashboard
-![Analytics Dashboard](https://media-hosting.imagekit.io/0f14178be83a4e87/4.png?Expires=1841498871&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=rpu8HsILNEuiq6uGLYBsk2idqxYgKD3eN0u~uCZ78PEMFfBhOJLK67nr8VbWofVqDfBcc5rCIyxuwO0d0puBAoAUGWPVIWBdQm0zoLIuvGmDdTCvPZxOUdi6tjuNocfokFx3XoJZ3VNi2QtBXWlzQf5vfjQSn2BW9MCEd3nr8KhxBp0FOsDPueLFI-O-zNRMIy2LM5Uj5ewZuCsLHKoFU0VuTUA0zjECfO68kbjZhRpYCLf6ya0bWPgUo5pE4aSdeIkmfA5Y-bdAZh~eEfdL8yfUr23FTb9-JV52T9R~xklw96ez9-ox7c1rrDmyAhJtCpTUC8axBSr7pJDRlS034Q__)
+![Analytics Dashboard](https://github.com/user-attachments/assets/588fe14b-7f34-4f9b-aa82-253f5fa2c6b3
+)
 
 
 Tracks growth trends over time across platforms, highlights performance spikes, and enables mentor-level insights.
@@ -56,7 +60,8 @@ Supports filtering by year, branch, or month for targeted academic evaluations.
 
 
 ## 4. Smart Analytics with Graphs & Detailed Data
-![Smart Analysis](https://media-hosting.imagekit.io/d385aaaa3c614f62/5.png?Expires=1841498874&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=Ez-8FZzX5juFW0SJLLdAVtSoC4LBIoWIEU9xFuj--AvfkcHPHO78Xzrdxd8EwjuFVV~4-YBzDdN45bXU6XjMFIBA7ODda78Yi4wq2-tUMYPLkeFbsVRYNedlqtTlvgpI4gCOCBft~7gRe8dR~Ye0LL~IL9VBf80EooQ2QM92X~n~6bHqKsoKIMLWGxuhXn2DmuajuQfjRmv3tdm-A6qrQw-CKpbobDLDzMmBF6nGv~~pVyxcxT3tBhQ1ha9AKoYrrjTkq5EHScq~Mf2r~sNdUiqdzhw~EXccO3B1QZYT2-zqGV5P-Mb4tjJ6OZve2HwQN6-IugM~nNc-dqbPOWzLOw__)
+![Smart Analysis](https://github.com/user-attachments/assets/c1a3e022-b45a-4e32-a2d6-b7b402016779
+)
 
 Get a clear picture of students progress with insightful graphs and in-depth stats.
 Analyze coding trends, identify top performers, and monitor improvements over time — all in one place.
@@ -64,7 +69,8 @@ Designed for mentors to make data-driven decisions with ease.
 
 
 ## 5. Easy Student Data Integration
-![adding student data](https://media-hosting.imagekit.io/baaeee7734dc4fae/6.png?Expires=1841498878&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=RFvL6yD3Vhuzgh7E6c6dNvvODA-OFnF5qQO8s7afW8x94CWyW8t2q87lMYY2BJsO-OMCP0iYuyDW0nLSHS59V5voGkAaZVprq1kVhJG9um9ntVgVreliTMo4LCep3PwQE8cR74TlZGJ2Qm9NmCzfTHJTOaWg-SLIa91GIJXDYixmbvNUHVDWrhfJBemB8t4EtH4ZVM7jGTp1qmmbMpL3Fxck5cmCUOWEe9tr4zO6bB-ihuqCMIJjFcwbNNuOUxSoJCLiuPdoBEjLaZZ0T44x-~xRGD6G~GORw4KXE3MfJ5mukvtSwRhZjKD-gVaYDHyLZbcn2h0KHCdPsmM6-wZV8Q__)
+![adding student data](https://github.com/user-attachments/assets/a5ab606c-2b0b-4c7b-a9e4-c27fce95e90a
+)
 Seamlessly add student data through a connected Google Form or directly from the platform.
 This ensures quick onboarding and effortless management of large student batches.
 
